@@ -51,7 +51,9 @@ This guide explains how to integrate a React application into Salesforce using t
     ```
 
 6. **Embed the Component in Salesforce**  
-    Add the Lightning component to a Lightning page or app.
+    - Add the Lightning component to a Lightning page or app or utility items 
+    - Open Copilot Assistant Lightning page
+    
 
 ## Testing
 - Navigate to the page where the Lightning component is added.
