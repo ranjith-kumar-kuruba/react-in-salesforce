@@ -1,49 +1,15 @@
 # Integrated React App in Salesforce Using Lightning Container
 
+## Overview
 This guide explains how to integrate a React application into Salesforce using the Lightning Container component.
-## Using React Container in Salesforce
+
+## Using React in Salesforce
 
 The `lightning:container` component is a powerful tool that allows you to embed third-party applications, such as React apps, directly into Salesforce. Here's a detailed explanation of how it works and how to use it.
 
 ### What is `lightning:container`?
 
 `lightning:container` is a Lightning Aura component that acts as a wrapper for hosting external applications. It uses an iframe to load the external app and provides a mechanism for two-way communication between Salesforce and the hosted app using the `postMessage` API.
-
-### Example Code
-
-Below is an example of how to use `lightning:container` to embed a React app in Salesforce.
-
-#### Lightning Component Markup
-```xml
-<!-- reactAppContainer.cmp -->
-<aura:component>
-    <!-- Embed the React app using lightning:container -->
-    <lightning:container 
-        src="{!$Resource.ReactApp + '/index.html'}" 
-        onmessage="{!c.handleMessage}" 
-        style="width: 100%; height: 100%;">
-    </lightning:container>
-</aura:component>
-```
-
-**Explanation:**
-- `src`: Specifies the URL of the React app. Here, the app is hosted as a Salesforce static resource (`$Resource.ReactApp`).
-- `onmessage`: Defines the handler for messages sent from the React app to Salesforce.
-- `style`: Sets the dimensions of the iframe.
-
-#### Controller Logic
-```javascript
-// reactAppContainerController.js
-({
-    handleMessage: function(component, event, helper) {
-        // Retrieve the message sent from the React app
-        const message = event.getParam("message");
-        console.log("Message from React App: ", message);
-
-        // Perform any necessary actions based on the message
-    }
-})
-```
 
 **Explanation:**
 - The `handleMessage` function listens for messages sent from the React app using the `postMessage` API.
@@ -55,7 +21,6 @@ To enable communication from the React app to Salesforce, use the `postMessage` 
 // Inside your React app
 window.parent.postMessage({ message: "Hello, Salesforce!" }, "*");
 ```
-
 **Explanation:**
 - `window.parent.postMessage`: Sends a message from the React app to the parent iframe (Salesforce).
 - The message can be any JavaScript object.
@@ -65,68 +30,97 @@ window.parent.postMessage({ message: "Hello, Salesforce!" }, "*");
 2. **Two-Way Communication**: Use `postMessage` for communication between Salesforce and the React app.
 3. **Security**: Always validate and sanitize messages to prevent security vulnerabilities.
 
-By following these steps, you can seamlessly integrate a React app into Salesforce using the `lightning:container` component.
-## Prerequisites
-- Salesforce Developer Org
-- React application
-- Basic knowledge of Salesforce Lightning Components
+## Deployment
 
-## Steps to Integrate
+### Option 1: Use the Pre-Built React App
+1. **Deploy the Salesforce App**  
+    Deploy the `force-app` folder to your Salesforce org using the Salesforce CLI:
+    ```bash
+    sfdx force:source:deploy -p force-app
+    ```
 
+2. **Verify Deployment**  
+    - Log in to your Salesforce org.
+    - Navigate to the Lightning page or app where the React app is embedded.
+    - Ensure the React app is loaded and functional.
+
+### Option 2: Clone and Build the React App
 1. **Clone the React Application**  
-    Clone the pre-built React application from the repository:
+    Clone the React app from the GitHub repository:
     ```bash
     git clone https://github.com/ranjith-kumar-kuruba/react-copilot.git
     cd react-copilot
+    ```
+
+2. **Install Dependencies**  
+    Install the required dependencies for the React app:
+    ```bash
     npm install
+    ```
+
+3. **Build the React App**  
+    Build the React app to generate the production-ready files:
+    ```bash
     npm run build
     ```
 
-2. **Host the React App**  
-    Deploy the React app to a static hosting service (e.g., AWS S3, Netlify, or Heroku) or use Salesforce's static resources.
-
-3. **Upload React App as a Static Resource**  
-    - Zip the `build` folder of your React app.
+4. **Upload the Build Files to Salesforce**  
+    - Zip the contents of the `build` folder.
     - Go to Salesforce Setup → Static Resources.
     - Upload the zipped file and name it (e.g., `ReactApp`).
 
-4. **Create a Lightning Component**  
-    Use the Lightning Container to embed the React app:
-    ```xml
-    <!-- reactAppContainer.cmp -->
-    <aura:component>
-         <lightning:container src="{!$Resource.ReactApp + '/index.html'}" 
-                                     onmessage="{!c.handleMessage}" 
-                                     style="width: 100%; height: 100%;">
-         </lightning:container>
-    </aura:component>
+5. **Deploy the Lightning Component**  
+    Deploy the `force-app` folder to your Salesforce org using the Salesforce CLI:
+    ```bash
+    sfdx force:source:deploy -p force-app
     ```
 
-5. **Add Controller Logic**  
-    Handle communication between Salesforce and the React app:
-    ```javascript
-    // reactAppContainerController.js
-    ({
-         handleMessage: function(component, event, helper) {
-              const message = event.getParam("message");
-              console.log("Message from React App: ", message);
-         }
-    })
-    ```
-
-6. **Embed the Component in Salesforce**  
-    - Add the Lightning component to a Lightning page or app or utility items 
-    - Open Copilot Assistant Lightning page
-    
-
-## Testing
-- Navigate to the page where the Lightning component is added.
-- Verify the React app is loaded and functional.
-
-## Notes
-- Ensure CORS is configured if hosting the React app externally.
-- Use `postMessage` for communication between Salesforce and the React app.
+6. **Test the Integration**  
+    - Navigate to the Lightning page or app where the React app is embedded.
+    - Verify the React app is loaded and functional.
 
 ## References
 - [Salesforce Lightning Container Documentation](https://developer.salesforce.com/docs/component-library/bundle/lightning:container/documentation)
 - [React Official Documentation](https://reactjs.org/docs/getting-started.html)
+
+## Example Interactions
+
+### Input and Expected Responses
+
+#### General Greetings
+| Input       | Expected Copilot Response                          |
+|-------------|----------------------------------------------------|
+| hello       | 👋 Hello! How can I assist you today?              |
+| hi          | 👋 Hello! How can I assist you today?              |
+| hey there   | 👋 Hello! How can I assist you today?              |
+
+#### ❓ Help & Info Commands
+| Input       | Expected Copilot Response                          |
+|-------------|----------------------------------------------------|
+| /help       | Try: /info, /plugin weather, or enter a Salesforce Record ID. |
+| /info       | 🤖 I am your Salesforce Copilot Assistant.         |
+| /unknown    | ❓ Unknown command. Try /help.                     |
+
+#### 🌤️ Weather Plugin
+| Input           | Expected Behavior                              |
+|------------------|-----------------------------------------------|
+| weather Delhi    | Fetches and shows current weather in Delhi    |
+| /plugin weather  | Shows funny weather-themed response           |
+| weather          | Does nothing or shows error (no city provided)|
+
+#### 😂 Joke Plugin
+| Input           | Expected Behavior                              |
+|------------------|-----------------------------------------------|
+| joke            | Fetches 3 two-part jokes using JokeAPI         |
+| /plugin joke    | Not supported — returns ❓ Unknown command      |
+
+#### 🔍 Salesforce Record ID
+| Input                | Expected Copilot Response                 |
+|-----------------------|-------------------------------------------|
+| 001XXXXXXXXXXXXXXX    | Shows button to open record, logs ID      |
+| 003ABCDEF123456XYZ    | Same as above                            |
+
+#### 🧠 Other Text
+| Input                | Expected Copilot Response                 |
+|-----------------------|-------------------------------------------|
+| random input text     | 🤖 You said: "random input text". Need help? Try /help. |
