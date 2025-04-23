@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+	<types>
+		<members>SessionCacheHelper</members>
+		<name>ApexClass</name>
+	</types>
+	<types>
+		<members>ReactContainer</members>
+		<name>AuraDefinitionBundle</name>
+	</types>
+	<types>
+		<members>*</members>
+		<name>CspTrustedSite</name>
+	</types>
+	<types>
+		<members>Copilot_Assistant</members>
+		<name>FlexiPage</name>
+	</types>
+	<types>
+		<members>Joke</members>
+		<members>Weather</members>
+		<name>RemoteSiteSetting</name>
+	</types>
+	<types>
+		<members>reactcopilot</members>
+		<name>StaticResource</name>
+	</types>
+	<version>63.0</version>
+</Package>
